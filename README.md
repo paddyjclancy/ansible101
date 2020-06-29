@@ -4,9 +4,9 @@
 2) Vagrant file:
 
 ```
-Vagrant.config ("2") do confic
+Vagrant.config ("2") do |config|
 	
-  app.vm.provision "ansible_local" do ansible
+  app.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
   end
 ```
