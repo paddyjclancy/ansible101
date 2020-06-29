@@ -29,6 +29,10 @@ Vagrant.config ("2") do |config|
       name: nginx
       state: started
     become: yes
+  - name: copy in app folder
+    copy:
+      src: ./app/
+      dest: /home/ubuntu/app-from-playbook/
 ```
 
 4) vagrant up
