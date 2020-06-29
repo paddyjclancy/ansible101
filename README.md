@@ -1,14 +1,19 @@
-1- Vagrant init
-2- Vagrant file:
+# Setting up Ansible
 
+1) Vagrant init
+2) Vagrant file:
+
+```
 Vagrant.config ("2") do confic
 	
   app.vm.provision "ansible_local" do ansible
       ansible.playbook = "playbook.yml"
   end
+```
 
-3- touch playbook.yml
+3) touch playbook.yml
 
+```
 ---
 
 - host: [APP]
@@ -24,5 +29,6 @@ Vagrant.config ("2") do confic
       name: nginx
       state: started
     become: yes
+```
 
-4- vagrant up
+4) vagrant up
