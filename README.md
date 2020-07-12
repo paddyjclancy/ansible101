@@ -1,10 +1,13 @@
 # Setting up Ansible
 
 1) Vagrant init
-2) Vagrant file:
+	- Creates 'blank' Vagrantfile
+2) Vagrantfile (for full version see example Vagrantfile
 
 ```
 Vagrant.config ("2") do |config|
+
+...
 	
   app.vm.provision "ansible_local" do |ansible|
       ansible.playbook = "playbook.yml"
