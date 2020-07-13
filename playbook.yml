@@ -1,19 +1,28 @@
+# YAML FILE STARTS WITH THREE --- DASHES(---)
 ---
+- hosts: web
+# Host is to define the name of your host machine, group or all servers
+# In this example we are targeting server called web
 
-- hosts: app
-  remote_user: sudo
+  gather_facts: yes
+# Gathering facts before performing any tasks
+
   become: true
+# Become is used to get root permission to perform any tasks that may require admin access
+
   tasks:
-  - name: ensure nginx is at the latest version
-    apt:
-      name: nginx
-      state: latest
-  - name: start nginx
-    service: 
-      name: nginx
-      state: started
-    become: yes
-  - name: copy in app folder
-    copy:
-      src: ./app/
-      dest: /home/ubuntu/app-from-playbook/
+# Tasks are executed in order, one at a time, against all Servers matched by the host pattern
+# Every task should have a name, which is included in the output from running the playbook
+# The goal of each task is to execute a module, with very specific arguments.
+
+  - name: Install nginx
+  # We are installing nginx on our web server
+
+    apt: pkg=nginx state=present
+    notify:
+    - restart nginx
+    - name: Enable nginx during boot
+      service: name=nginx  state=started enabled=yes
+  handlers:
+          - name: restart nginx
+            service: name=nginx state=restarted
