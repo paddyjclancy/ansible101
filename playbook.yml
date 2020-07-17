@@ -8,21 +8,56 @@
 # Gathering facts before performing any tasks
 
   become: true
-# Become is used to get root permission to perform any tasks that may require admin access
+# Become is used to get root permission to perform any tasks that may require admin access (sudo)
 
   tasks:
 # Tasks are executed in order, one at a time, against all Servers matched by the host pattern
 # Every task should have a name, which is included in the output from running the playbook
 # The goal of each task is to execute a module, with very specific arguments.
+  - name: Copy /app into web host
+    copy:
+      src: /home/ubuntu/app
+      dest: /home/ubuntu
 
+  # Install nginx
   - name: Install nginx
-  # We are installing nginx on our web server
-
     apt: pkg=nginx state=present
-    notify:
-    - restart nginx
-    - name: Enable nginx during boot
-      service: name=nginx  state=started enabled=yes
+    notify: restart nginx
+
+  - name: Enable nginx during boot
+    service: name=nginx  state=started enabled=yes
+  handlers:  
+
+  - name: Restart nginx
+    service: name=nginx state=restarted
+
+  # Install git
+  - name: Install Git
+    apt: name=git state=present
+
+  # Install python
+  - name: Install python
+    apt : pkg=python state=present
+
+  # Install node
+  - name: Install Node
+    shell: |
+      curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+
+  - name: Install node part 2
+    apt: pkg=nodejs state=present
+
+  # Install npm
+  - name: Install NPM
+    shell: npm i
+    args:
+      chdir: /home/ubuntu
+
+  # Install pm2  
+  - name: Install PM2
+    npm:
+      name: pm2
+      global: yes
   handlers:
           - name: restart nginx
             service: name=nginx state=restarted
